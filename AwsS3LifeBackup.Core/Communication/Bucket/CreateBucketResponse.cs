@@ -8,5 +8,13 @@ namespace AwsS3LifeBackup.Core.Communication.Bucket
 {
     public class CreateBucketResponse
     {
+        public CreateBucketResponse(string requestId, string buctetName)
+        {
+            RequestId = requestId;
+            BucketName = buctetName;
+        }
+
+        public string RequestId { get; set; }
+        public string BucketName { get; set; }
     }
 }

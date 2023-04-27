@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AwsS3LifeBackup.Infrastructure.Repositories
 {
-    public class FilesRespository : IFilesRepository
+    public class FilesRepository : IFilesRepository
     {
     }
 }
