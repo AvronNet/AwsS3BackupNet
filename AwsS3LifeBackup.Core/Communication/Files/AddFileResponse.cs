@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace AwsS3LifeBackup.Core.Communication.Files
 {
-    internal class AddFileResponse
+    public class AddFileResponse
     {
+        public string FileName { get; set; }
+        public string Url { get; set; }
     }
 }

@@ -31,5 +31,21 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
 
             return new CreateBucketResponse(putBucketResponse.ResponseMetadata.RequestId, bucketName);
         }
+
+        public async Task<IEnumerable<ListS3BucketsResponse>> ListBuckets()
+        {
+            var response = await _s3Client.ListBucketsAsync();
+
+            return response.Buckets.Select(x => new ListS3BucketsResponse()
+            {
+                BucketName = x.BucketName,
+                CreationDate = x.CreationDate,
+            });
+        }
+
+        public async Task DeleteBucket(string bucketName)
+        {
+            await _s3Client.DeleteBucketAsync(bucketName);
+        }
     }
 }

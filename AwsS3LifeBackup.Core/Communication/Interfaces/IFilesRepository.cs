@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AwsS3LifeBackup.Core.Communication.Files;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,6 @@ namespace AwsS3LifeBackup.Core.Communication.Interfaces
 {
     public interface IFilesRepository
     {
+        Task<List<AddFileResponse>> UploadFiles(string bucketName, IList<IFormFile> files);
     }
 }

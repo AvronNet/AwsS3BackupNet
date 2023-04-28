@@ -16,6 +16,11 @@ namespace AwsS3LifeBackup.API
             // Add services to the container.
             RegisterServices(builder.Services, builder.Configuration);
 
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Build();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

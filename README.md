@@ -22,3 +22,22 @@ Steps:
 6. This created a credentials file in your user folder
 	- on Windows this is C:\Users\[username]\.aws
 7. edit this file and replace [default] with the AWS profile name set your appsettings.json file of the startup project
+
+
+# Set up AWS S3 bucket with cloudfront access
+
+Steps:
+1. Create a bucket with the Block all public access property checked
+2. Create an AWS CloudFront Distribution with properties:
+	- origins - the AWS S3 bucket we want to expose
+		- this will give you a prompt in AWS that you will get a permissions policy to set on your S3 bucket after creating this Distribution
+	- select the possible HTTP methods that can be used on that bucket publicly
+	- set other properties as you see fit
+	- click Create
+	- at the top of the page look for the prompt for that gives you the permission policy for the S3 bucket
+		- click the copy permissions script button
+		- click the link to the bucket configuration
+		- in Bucket policy section click the Edit button and paste the policy configuration from your CloudFront distribution
+	- DONE
+3. Access your bucket files from the cloudfront URL
+	- URL format - [CloudFront_Distribution_domain_name]/[S3_prefix_aka_subfolder]/[filename_with_extension]

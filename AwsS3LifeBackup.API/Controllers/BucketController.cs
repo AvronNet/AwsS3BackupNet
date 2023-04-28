@@ -30,5 +30,24 @@ namespace AwsS3LifeBackup.API.Controllers
 
             return result == null ? BadRequest() : Ok(result);
         }
+
+
+        [HttpGet]
+        [Route("list")]
+        public async Task<ActionResult<IEnumerable<ListS3BucketsResponse>>> ListS3Buckets()
+        {
+            var result = await _bucketRepository.ListBuckets();
+
+            return result == null ? NotFound() : Ok(result);
+        }
+
+        [HttpDelete]
+        [Route("delete")]
+        public async Task<IActionResult> DeleteS3Bucket(string bucketName)
+        {
+            await _bucketRepository.DeleteBucket(bucketName);
+
+            return Ok();
+        }
     }
 }
