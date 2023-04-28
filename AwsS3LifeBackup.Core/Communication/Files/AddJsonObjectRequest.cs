@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace AwsS3LifeBackup.Core.Communication.Files
 {
     public class AddJsonObjectRequest
     {
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; }
+        [JsonPropertyName("timesent")]
+        public DateTime TimeSent { get; set; }
+        [JsonPropertyName("data")]
+        public string Data { get; set; }
     }
 }

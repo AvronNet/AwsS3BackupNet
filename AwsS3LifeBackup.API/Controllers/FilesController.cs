@@ -29,5 +29,51 @@ namespace AwsS3LifeBackup.API.Controllers
 
             return response == null ? StatusCode((int)HttpStatusCode.InternalServerError)  : Ok(response);
         }
+
+        [HttpGet]
+        [Route("{bucketName}/list")]
+        [Route("{bucketName}/list/{prefix?}")]
+        public async Task<ActionResult<IEnumerable<ListFilesResponse>>> ListFiles(string bucketName, string? prefix = "")
+        {
+            var response = await _filesRepository.ListFiles(bucketName, prefix);
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{bucketName}/download/{fileName}")]
+        public async Task<IActionResult> DownloadFile(string bucketName, string fileName)
+        {
+            await _filesRepository.DownloadFile(bucketName, fileName);
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("{bucketName}/delete/{fileName}")]
+        public async Task<ActionResult<DeleteFileResponse>> DeleteFile(string bucketName, string fileName)
+        {
+            var response = await _filesRepository.DeleteFile(bucketName, fileName);
+
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("{bucketName}/addjsonobject")]
+        public async Task<IActionResult> AddJsonObject(string bucketName, AddJsonObjectRequest request)
+        {
+            await _filesRepository.AddJsonObject(bucketName, request);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("{bucketName}/getjsonobject")]
+        public async Task<ActionResult<GetJsonObjectResponse>> GetJsonObject(string bucketName, string fileName)
+        {
+            var response = await _filesRepository.GetJsonObject(bucketName, fileName);
+
+            return Ok(response);
+        }
     }
 }
