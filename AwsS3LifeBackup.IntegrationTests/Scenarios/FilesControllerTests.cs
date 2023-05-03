@@ -26,9 +26,9 @@ namespace AwsS3LifeBackup.IntegrationTests.Scenarios
                     {
                         DefaultClientConfig =
                         {
-                            ServiceURL = "http://localhost:9003"
+                            ServiceURL = "http://localhost:4566"
                         },
-                        Credentials = new BasicAWSCredentials("FAKE", "FAKE")
+                        Credentials = new BasicAWSCredentials("test", "test")
                     });
                 });
             }).CreateClient();
@@ -38,7 +38,11 @@ namespace AwsS3LifeBackup.IntegrationTests.Scenarios
 
         private async Task CreateBucket()
         {
-            await _client.PostAsJsonAsync("api/bucket/create/testS3Bucket", "testS3Bucket");
+            var response = await _client.PostAsJsonAsync("api/bucket/create/testS3Bucket", "testS3Bucket");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Failed to create test S3 bucket");
+            }
         }
 
         [Fact]

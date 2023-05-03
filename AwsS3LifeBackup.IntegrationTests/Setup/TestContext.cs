@@ -50,17 +50,17 @@ namespace AwsS3LifeBackup.IntegrationTests.Setup
                 ExposedPorts = new Dictionary<string, EmptyStruct>
                 {
                     {
-                        "9003", default
+                        "4566", default
                     }
                 },
                 HostConfig = new HostConfig
                 {
                     PortBindings = new Dictionary<string, IList<PortBinding>>
                     {
-                        {"9003", new List<PortBinding> {new PortBinding { HostPort = "9003"}}}
+                        {"4566", new List<PortBinding> {new PortBinding { HostPort = "4566" } }}
                     }
                 },
-                Env = new List<string> { "SERVICES=s3", "DEFAULT_REGION=eu-central-1", "EDGE_PORT=9003" }
+                Env = new List<string> { "SERVICES=s3:4566", "EXTRA_CORS_ALLOWED_ORIGINS=*"}
             });
 
             _containerId = response.ID;
