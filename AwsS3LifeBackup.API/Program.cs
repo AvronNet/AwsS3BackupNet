@@ -4,6 +4,8 @@ using AwsS3LifeBackup.Core.Communication.Interfaces;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
 using AwsS3LifeBackup.Infrastructure.Repositories;
+using AwsS3LifeBackup.Core.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AwsS3LifeBackup.API
 {
@@ -20,6 +22,7 @@ namespace AwsS3LifeBackup.API
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables()
                 .Build();
+            builder.Services.Configure<S3BucketConfiguration>(builder.Configuration.GetSection("S3BucketConfiguration"));
 
             var app = builder.Build();
 
@@ -61,6 +64,7 @@ namespace AwsS3LifeBackup.API
 
             services.AddSingleton<IBucketRepository, BucketRepository>();
             services.AddSingleton<IFilesRepository, FilesRepository>();
+            services.AddSingleton<IFolderRepository, FolderRepository>();
         }
     }
 }

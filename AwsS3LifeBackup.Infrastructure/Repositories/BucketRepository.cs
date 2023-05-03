@@ -1,11 +1,13 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using AwsS3LifeBackup.Core.Communication.Bucket;
+using AwsS3LifeBackup.Core.Communication.Files;
 using AwsS3LifeBackup.Core.Communication.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace AwsS3LifeBackup.Infrastructure.Repositories
@@ -30,6 +32,19 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
             var putBucketResponse =  await _s3Client.PutBucketAsync(putBucketRequest);
 
             return new CreateBucketResponse(putBucketResponse.ResponseMetadata.RequestId, bucketName);
+        }
+
+        public async Task AddFolder(string bucketName, string folderName, AddJsonObjectRequest request)
+        {
+            var s3Key = folderName.Last() == '/' ? folderName : $"{folderName}/";
+
+            var putObjectRequest = new PutObjectRequest
+            {
+                BucketName = bucketName,
+                Key = s3Key
+            };
+
+            await _s3Client.PutObjectAsync(putObjectRequest);
         }
 
         public async Task<IEnumerable<ListS3BucketsResponse>> ListBuckets()

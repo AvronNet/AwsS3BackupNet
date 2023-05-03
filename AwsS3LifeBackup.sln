@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4D414CD7-0F7E-4A9B-8AB7-044C94455F64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwsS3LifeBackup.IntegrationTests", "AwsS3LifeBackup.IntegrationTests\AwsS3LifeBackup.IntegrationTests.csproj", "{3D26829B-E07D-4C84-86BF-BE9E5471AEDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,9 +40,16 @@ Global
 		{F66F0562-AC2F-446B-9646-947DBDB09173}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F66F0562-AC2F-446B-9646-947DBDB09173}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F66F0562-AC2F-446B-9646-947DBDB09173}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D26829B-E07D-4C84-86BF-BE9E5471AEDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D26829B-E07D-4C84-86BF-BE9E5471AEDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D26829B-E07D-4C84-86BF-BE9E5471AEDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D26829B-E07D-4C84-86BF-BE9E5471AEDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3D26829B-E07D-4C84-86BF-BE9E5471AEDF} = {4D414CD7-0F7E-4A9B-8AB7-044C94455F64}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {97A57BF8-B585-45BF-8B30-FB75EF6F7B5B}

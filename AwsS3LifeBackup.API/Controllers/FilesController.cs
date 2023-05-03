@@ -33,7 +33,7 @@ namespace AwsS3LifeBackup.API.Controllers
         [HttpGet]
         [Route("{bucketName}/list")]
         [Route("{bucketName}/list/{prefix?}")]
-        public async Task<ActionResult<IEnumerable<ListFilesResponse>>> ListFiles(string bucketName, string? prefix = "")
+        public async Task<ActionResult<IEnumerable<ListFilesResponse>>> ListFiles(string bucketName, string prefix = "")
         {
             var response = await _filesRepository.ListFiles(bucketName, prefix);
 

@@ -20,6 +20,26 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Determines whether a file exists within the specified bucket
+        /// </summary>
+        /// <param name="bucketName">The name of the bucket to search</param>
+        /// <param name="filePrefix">Match files that begin with this prefix</param>
+        /// <returns>True if the file exists</returns>
+        public async Task<bool> FileExists(string bucketName, string filePrefix)
+        {
+            var request = new ListObjectsRequest
+            {
+                BucketName = bucketName,
+                Prefix = filePrefix,
+                MaxKeys = 1
+            };
+
+            var response = await _amazonS3Client.ListObjectsAsync(request);
+
+            return response.S3Objects.Any();
+        }
+
         public async Task<List<AddFileResponse>> UploadFiles(string bucketName, IList<IFormFile> files)
         {
             var response = new List<AddFileResponse>();
@@ -116,7 +136,7 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
                 BucketName = bucketName,
                 Key = s3Key,
                 ContentBody = JsonSerializer.Serialize(request)
-            };
+            }; 
 
             await _amazonS3Client.PutObjectAsync(putObjectRequest);
         }

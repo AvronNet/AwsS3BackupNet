@@ -10,6 +10,7 @@ namespace AwsS3LifeBackup.Core.Communication.Interfaces
 {
     public interface IFilesRepository
     {
+        Task<bool> FileExists(string bucketName, string filePrefix);
         Task<List<AddFileResponse>> UploadFiles(string bucketName, IList<IFormFile> files);
         Task<IEnumerable<ListFilesResponse>> ListFiles(string bucketName, string prefix = "");
         Task DownloadFile(string bucketName, string fileName);
