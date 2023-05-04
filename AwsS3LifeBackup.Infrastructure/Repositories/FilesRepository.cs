@@ -5,7 +5,10 @@ using AwsS3LifeBackup.Core.Communication.Files;
 using AwsS3LifeBackup.Core.Communication.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System.Buffers.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AwsS3LifeBackup.Infrastructure.Repositories
 {
@@ -156,6 +159,30 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
                 var contents = reader.ReadToEnd();
                 return string.IsNullOrWhiteSpace(contents) ? null : JsonSerializer.Deserialize<GetJsonObjectResponse>(contents);
             }
+        }
+
+        public async Task AddBase64File(string bucketName, AddBase64FileRequest request)
+        {
+            var fileContentHeaders = request.Base64Content.Substring(0, request.Base64Content.IndexOf("base64,") + 7);
+            var fileContent = request.Base64Content.Replace(fileContentHeaders, string.Empty);
+
+            Regex regex = new Regex("(?<= data :)(.*)(?=; base64)");
+            Match match = regex.Match(request.Base64Content);
+            var contentType = match.Value;
+
+            byte[] bytes = Convert.FromBase64String(fileContent);
+
+            var putObjectRequest = new PutObjectRequest
+            {
+                BucketName = bucketName,
+                Key = request.FileName,                
+                ContentType = contentType
+            };
+
+            using var ms = new MemoryStream(bytes);
+            putObjectRequest.InputStream = ms;
+            await _amazonS3Client.PutObjectAsync(putObjectRequest);
+
         }
     }
 }

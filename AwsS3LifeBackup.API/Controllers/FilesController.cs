@@ -75,5 +75,18 @@ namespace AwsS3LifeBackup.API.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost]
+        [Route("{bucketName}/addbase64file")]
+        public async Task<IActionResult> AddJsonObject(string bucketName, AddBase64FileRequest request)
+        {
+            if(!request.Base64Content.Contains("base64"))
+            {
+                return BadRequest("Base64Content property must contain the full base64 file representation!");
+            }
+            await _filesRepository.AddBase64File(bucketName, request);
+
+            return Ok();
+        }
     }
 }
