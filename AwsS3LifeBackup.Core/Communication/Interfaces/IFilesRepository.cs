@@ -12,6 +12,7 @@ namespace AwsS3LifeBackup.Core.Communication.Interfaces
     {
         Task<bool> FileExists(string bucketName, string filePrefix);
         Task<List<AddFileResponse>> UploadFiles(string bucketName, IList<IFormFile> files);
+        string GetPresignedUrlForFile(string bucketName, string filePrefix);
         Task<IEnumerable<ListFilesResponse>> ListFiles(string bucketName, string prefix = "");
         Task DownloadFile(string bucketName, string fileName);
         Task<DeleteFileResponse> DeleteFile(string bucketName, string fileName);

@@ -2,6 +2,8 @@
 using AwsS3LifeBackup.Core.Communication.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Text.Encodings.Web;
+using System.Web;
 
 namespace AwsS3LifeBackup.API.Controllers
 {
@@ -35,7 +37,8 @@ namespace AwsS3LifeBackup.API.Controllers
         [Route("{bucketName}/list/{prefix?}")]
         public async Task<ActionResult<IEnumerable<ListFilesResponse>>> ListFiles(string bucketName, string prefix = "")
         {
-            var response = await _filesRepository.ListFiles(bucketName, prefix);
+            var decodedPrefix = HttpUtility.UrlDecode(prefix);
+            var response = await _filesRepository.ListFiles(bucketName, decodedPrefix);
 
             return Ok(response);
         }
@@ -44,7 +47,8 @@ namespace AwsS3LifeBackup.API.Controllers
         [Route("{bucketName}/download/{fileName}")]
         public async Task<IActionResult> DownloadFile(string bucketName, string fileName)
         {
-            await _filesRepository.DownloadFile(bucketName, fileName);
+            var fileNameDecoded = HttpUtility.UrlDecode(fileName);
+            await _filesRepository.DownloadFile(bucketName, fileNameDecoded);
 
             return Ok();
         }
@@ -53,7 +57,8 @@ namespace AwsS3LifeBackup.API.Controllers
         [Route("{bucketName}/delete/{fileName}")]
         public async Task<ActionResult<DeleteFileResponse>> DeleteFile(string bucketName, string fileName)
         {
-            var response = await _filesRepository.DeleteFile(bucketName, fileName);
+            var fileNameDecoded = HttpUtility.UrlDecode(fileName);
+            var response = await _filesRepository.DeleteFile(bucketName, fileNameDecoded);
 
             return Ok(response);
         }
@@ -87,6 +92,16 @@ namespace AwsS3LifeBackup.API.Controllers
             await _filesRepository.AddBase64File(bucketName, request);
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("{bucketName}/get-presigned-url/{fileName}")]
+        public ActionResult<string> GetPresignedUrl(string bucketName, string fileName)
+        {
+            var fileNameDecoded = HttpUtility.UrlDecode(fileName);
+            var response = _filesRepository.GetPresignedUrlForFile(bucketName, fileNameDecoded);
+
+            return Ok(response);
         }
     }
 }

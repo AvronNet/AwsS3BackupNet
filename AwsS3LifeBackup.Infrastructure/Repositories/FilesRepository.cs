@@ -5,10 +5,8 @@ using AwsS3LifeBackup.Core.Communication.Files;
 using AwsS3LifeBackup.Core.Communication.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AwsS3LifeBackup.Infrastructure.Repositories
 {
@@ -79,6 +77,18 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
             }
 
             return response;
+        }
+
+        public string GetPresignedUrlForFile(string bucketName, string filePrefix)
+        {
+            var expiryUrlRequest = new GetPreSignedUrlRequest
+            {
+                BucketName = bucketName,
+                Key = filePrefix,
+                Expires = DateTime.Now.AddDays(1)
+            };
+
+            return _amazonS3Client.GetPreSignedURL(expiryUrlRequest);
         }
 
         public async Task<IEnumerable<ListFilesResponse>> ListFiles(string bucketName, string prefix = "")
