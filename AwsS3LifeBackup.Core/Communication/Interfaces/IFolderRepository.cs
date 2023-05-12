@@ -10,6 +10,6 @@ namespace AwsS3LifeBackup.Core.Communication.Interfaces
 {
     public interface IFolderRepository
     {
-        
+        Task<bool> CreateFolder(string folderName, string pathToFolder = "");
     }
 }

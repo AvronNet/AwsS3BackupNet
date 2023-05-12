@@ -41,38 +41,33 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
             return response.S3Objects.Any();
         }
 
-        public async Task<List<AddFileResponse>> UploadFiles(string bucketName, IList<IFormFile> files)
+        public async Task<List<AddFileResponse>> UploadFiles(string bucketName, IList<IFormFile> files, string prefix = "")
         {
             var response = new List<AddFileResponse>();
             var cloudfrondDomain = _configuration["CloudFront:DistributionUrl"];
 
             foreach (var file in files)
             {
-                var uploadRequest = new TransferUtilityUploadRequest { BucketName = bucketName, InputStream = file.OpenReadStream(), Key = file.FileName, CannedACL = S3CannedACL.NoACL };
+                var fileKey = file.FileName;
+                if(!string.IsNullOrWhiteSpace(prefix))
+                {
+                    fileKey = $"{EnsureFolderTrailingSlash(prefix.Trim())}{file.FileName}";
+                }
+                var uploadRequest = new TransferUtilityUploadRequest {
+                    BucketName = bucketName,
+                    InputStream = file.OpenReadStream(),
+                    Key = fileKey,
+                    CannedACL = S3CannedACL.NoACL };
 
                 using (var fileTransferUtility = new TransferUtility(_amazonS3Client))
                 {
                     await fileTransferUtility.UploadAsync(uploadRequest);
                 }
 
-                /* if needed you can get a download link with an expiration time, code below */
-                #region Get PreSigned URL
-                /*
-                    var expiryUrlRequest = new GetPreSignedUrlRequest
-                    {
-                        BucketName = bucketName,
-                        Key = file.FileName,
-                        Expires = DateTime.Now.AddDays(1)
-                    };
-
-                    var url = _amazonS3Client.GetPreSignedURL(expiryUrlRequest);
-                */
-                #endregion
-
                 response.Add(new AddFileResponse()
                 {
                     FileName = file.FileName,
-                    Url = $"{cloudfrondDomain}/{file.FileName}"
+                    Url = $"{cloudfrondDomain}/{fileKey}"
                 });
             }
 
@@ -194,5 +189,7 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
             await _amazonS3Client.PutObjectAsync(putObjectRequest);
 
         }
+
+        private string EnsureFolderTrailingSlash(string folderName) => folderName.Last() == '/' ? folderName : $"{folderName}/";
     }
 }

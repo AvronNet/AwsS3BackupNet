@@ -2,7 +2,6 @@
 using AwsS3LifeBackup.Core.Communication.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Text.Encodings.Web;
 using System.Web;
 
 namespace AwsS3LifeBackup.API.Controllers
@@ -19,15 +18,15 @@ namespace AwsS3LifeBackup.API.Controllers
         }
 
         [HttpPost]
-        [Route("{bucketName}/add")]
-        public async Task<ActionResult<List<AddFileResponse>>> AddFiles(string bucketName, IList<IFormFile> formFiles)
+        [Route("{bucketName}/add/{prefix?}")]
+        public async Task<ActionResult<List<AddFileResponse>>> AddFiles(string bucketName, IList<IFormFile> formFiles, string prefix = "")
         {
             if (formFiles == null || !formFiles.Any())
             {
                 return BadRequest("The request doesn't contain any files to upload.");
             }
-
-            var response = await _filesRepository.UploadFiles(bucketName, formFiles);
+            var decodedPrefix = HttpUtility.UrlDecode(prefix);
+            var response = await _filesRepository.UploadFiles(bucketName, formFiles, decodedPrefix);
 
             return response == null ? StatusCode((int)HttpStatusCode.InternalServerError)  : Ok(response);
         }

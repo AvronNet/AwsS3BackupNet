@@ -26,7 +26,7 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
             _bucketConfiguration = bucketConfiguration.Value;
         }
 
-        public async Task CreateFolder(string folderName, string pathToFolder = "")
+        public async Task<bool> CreateFolder(string folderName, string pathToFolder = "")
         {
             var s3Key = EnsureFolderTrailingSlash(folderName);
             if(!string.IsNullOrEmpty(pathToFolder))
@@ -40,7 +40,9 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
                 Key = s3Key
             };
 
-            await _s3Client.PutObjectAsync(putObjectRequest);
+            var result = await _s3Client.PutObjectAsync(putObjectRequest);
+
+            return result.HttpStatusCode.Equals(System.Net.HttpStatusCode.OK);
         }
 
         private string EnsureFolderTrailingSlash(string folderName) => folderName.Last() == '/' ? folderName : $"{folderName}/";
