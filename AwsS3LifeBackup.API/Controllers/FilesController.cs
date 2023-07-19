@@ -62,6 +62,16 @@ namespace AwsS3LifeBackup.API.Controllers
             return Ok(response);
         }
 
+        [HttpDelete]
+        [Route("{bucketName}/delete/prefix/{prefix}")]
+        public async Task<ActionResult<DeleteFileResponse>> DeleteAllFilesOnPrefix(string bucketName, string prefix)
+        {
+            var decodedPrefix = HttpUtility.UrlDecode(prefix);
+            var response = await _filesRepository.DeleteFilesByPrefix(bucketName, decodedPrefix);
+
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("{bucketName}/addjsonobject")]
         public async Task<IActionResult> AddJsonObject(string bucketName, AddJsonObjectRequest request)

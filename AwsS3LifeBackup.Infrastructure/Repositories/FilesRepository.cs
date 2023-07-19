@@ -133,6 +133,28 @@ namespace AwsS3LifeBackup.Infrastructure.Repositories
             };
         }
 
+        public async Task<DeleteFileResponse> DeleteFilesByPrefix(string bucketName, string prefix)
+        {
+            var files = await ListFiles(bucketName, prefix);
+
+            var multiObjectDeleteRequest = new DeleteObjectsRequest
+            {
+                BucketName = bucketName
+            };
+            
+            files.ToList().ForEach(f =>
+            {
+                multiObjectDeleteRequest.AddKey(f.Key);
+            });
+
+            var response = await _amazonS3Client.DeleteObjectsAsync(multiObjectDeleteRequest);
+
+            return new DeleteFileResponse
+            {
+                NumberOfDeletedObjects = response.DeletedObjects.Count
+            };
+        }
+
         public async Task AddJsonObject(string bucketName, AddJsonObjectRequest request)
         {
             var createdOnUtc = DateTime.UtcNow;

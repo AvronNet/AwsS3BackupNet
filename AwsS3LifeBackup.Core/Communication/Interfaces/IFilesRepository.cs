@@ -16,10 +16,9 @@ namespace AwsS3LifeBackup.Core.Communication.Interfaces
         Task<IEnumerable<ListFilesResponse>> ListFiles(string bucketName, string prefix = "");
         Task DownloadFile(string bucketName, string fileName);
         Task<DeleteFileResponse> DeleteFile(string bucketName, string fileName);
+        Task<DeleteFileResponse> DeleteFilesByPrefix(string bucketName, string prefix);
         Task AddJsonObject(string bucketName, AddJsonObjectRequest request);
-
         Task<GetJsonObjectResponse?> GetJsonObject(string bucketName, string fileName);
-
         Task AddBase64File(string bucketName, AddBase64FileRequest request);
     }
 }
