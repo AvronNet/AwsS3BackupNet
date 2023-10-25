@@ -18,6 +18,7 @@ namespace AwsS3LifeBackup.API.Controllers
         }
 
         [HttpPost]
+        [DisableRequestSizeLimit]
         [Route("{bucketName}/add/{prefix?}")]
         public async Task<ActionResult<List<AddFileResponse>>> AddFiles(string bucketName, IList<IFormFile> formFiles, string prefix = "")
         {
